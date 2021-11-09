@@ -1,0 +1,75 @@
+pipeline {
+    environment { 
+        registryCredential = 'dockerhub_id' 
+        dockerImage_vote = "ticicobresiserr/voting-app_vote:"
+        dockerImage_worker = "ticicobresiserr/voting-app_worker:"
+        dockerImage_result = "ticicobresiserr/voting-app_result:"
+        ver= ''
+        
+    }
+    agent any
+
+    stages {
+        
+        stage('Clone'){
+            steps { 
+                sh "echo 'github 0'"
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'CleanCheckout']], userRemoteConfigs: [[credentialsId: 'credenciales_git_2', url: 'https://github.com/Nara00/trabajo_integrador_ingsw3.git']]])
+                sh "echo 'github 1'"
+            }
+                
+        }
+        
+        stage('Build'){
+            steps {
+                dir('example-voting-app') {
+                    sh "docker-compose build"
+                }
+            }
+            
+        }
+        
+       
+        stage('Deploy our image') { 
+            steps { 
+                script { 
+                    ver = "v1.0." + "$BUILD_NUMBER" 
+                    sh "echo $ver"
+                    dockerImage_vote = dockerImage_vote + ver
+                    dockerImage_worker = dockerImage_worker + ver
+                    dockerImage_result = dockerImage_result + ver
+                    sh "echo $dockerImage_vote"
+                    docker.withRegistry( '', registryCredential ){
+                        sh "docker tag example-voting-app_vote:latest $dockerImage_vote"
+                        sh "docker tag example-voting-app_worker:latest $dockerImage_worker"
+                        sh "docker tag example-voting-app_result:latest $dockerImage_result"
+                        
+                        sh "docker push $dockerImage_vote"
+                        sh "docker push $dockerImage_worker"
+                        sh "docker push $dockerImage_result"
+                    }
+                } 
+                
+            
+            }
+        }
+        
+        stage('Cleaning up') { 
+            steps { 
+                sh "docker rmi $dockerImage_vote" 
+                sh "docker rmi $dockerImage_worker"
+                sh "docker rmi $dockerImage_result"  
+            }
+        } 
+        
+         stage('UP') {
+            steps {
+                dir('example-voting-app') {
+                    sh "echo $ver"
+                    sh "export VERSION=$ver && docker-compose -f docker-compose-prod.yml up -d "
+                }
+            }
+ 
+        }
+    }
+}
