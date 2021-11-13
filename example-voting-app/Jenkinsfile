@@ -30,7 +30,7 @@ pipeline {
         }
         
        
-        stage('Deploy our image') { 
+        stage('Publish') { 
             steps { 
                 script { 
                     ver = "v1.0." + "$BUILD_NUMBER" 
@@ -62,12 +62,26 @@ pipeline {
             }
         } 
         
-         stage('UP') {
+        stage('Deploy') {
             steps {
                 dir('example-voting-app') {
                     sh "echo $ver"
                     sh "export VERSION=$ver && docker-compose -f docker-compose-prod.yml up -d "
                 }
+            }
+ 
+        }
+
+        stage('System test') {
+            steps {
+                dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
+                    sh "npx codeceptjs run --steps --reporter mocha-multi"
+                }
+            post {
+                success {
+                    junit '/Users/ticianacobresi/Desktop/4Anio/system_tests/output/result.xml'
+                }
+            }
             }
  
         }
