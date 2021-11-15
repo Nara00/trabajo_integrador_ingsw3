@@ -61,6 +61,28 @@ pipeline {
                 sh "docker rmi $dockerImage_result"  
             }
         } 
+
+        stage('Staging & tests') {
+            steps {
+                dir('/Users/ticianacobresi/Desktop/4Anio/staging') {
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'CleanCheckout']], userRemoteConfigs: [[credentialsId: 'credenciales_git_2', url: 'https://github.com/Nara00/trabajo_integrador_ingsw3.git']]])
+                    dir('example-voting-app') {
+                        sh "echo $ver"
+                        sh "export VERSION=$ver && docker-compose -f docker-compose-tests-staging.yml up -d "
+                    }
+                }
+                dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
+                    sh "npx codeceptjs run --steps --reporter mocha-multi"
+                }
+            }
+            post {
+                always {
+                    dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
+                       junit 'output/result.xml'
+                    }   
+                }
+            } 
+        }
         
         stage('Deploy') {
             steps {
@@ -74,19 +96,6 @@ pipeline {
             }
         }
 
-        stage('System test') {
-            steps {
-                dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
-                    sh "npx codeceptjs run --steps --reporter mocha-multi"
-                }
-            }
-            post {
-                always {
-                    dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
-                       junit 'output/result.xml'
-                    }   
-                }
-            } 
-        }
+        
     }
 }
