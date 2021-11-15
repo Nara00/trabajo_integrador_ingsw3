@@ -80,7 +80,9 @@ pipeline {
             }
             post {
                 always {
-                    junit '/Users/ticianacobresi/Desktop/4Anio/system_tests/output/result.xml'
+                    dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
+                       junit 'output/result.xml'
+                    }   
                 }
             } 
         }
