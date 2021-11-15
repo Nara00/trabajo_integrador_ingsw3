@@ -98,7 +98,7 @@ services:
       - ./result:/app
     ports:
       - "5001:80"
-      - "5859:5858"
+      - "5858:5858"
     networks:
       - front-tier
       - back-tier

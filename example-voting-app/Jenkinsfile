@@ -77,13 +77,12 @@ pipeline {
                 dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
                     sh "npx codeceptjs run --steps --reporter mocha-multi"
                 }
+            }
             post {
-                success {
+                always {
                     junit '/Users/ticianacobresi/Desktop/4Anio/system_tests/output/result.xml'
                 }
-            }
-            }
- 
+            } 
         }
     }
 }
