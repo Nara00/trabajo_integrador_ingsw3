@@ -36,9 +36,9 @@ services:
     networks:
       - back-tier
 
-  db-test:
+  db:
     image: postgres:9.4
-    container_name: db-test
+    container_name: db
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
