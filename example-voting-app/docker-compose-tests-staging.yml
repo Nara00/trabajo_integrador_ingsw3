@@ -4,6 +4,7 @@ version: "3"
 services:
   vote:
     image: ticicobresiserr/voting-app_vote:${VERSION}
+    container_name: vote-test
     command: python app.py
     ports:
       - "5002:80"
@@ -13,6 +14,7 @@ services:
 
   result:
     image: ticicobresiserr/voting-app_result:${VERSION}
+    container_name: result-test
     command: nodemon server.js
     ports:
       - "5003:80"
@@ -23,6 +25,7 @@ services:
 
   worker:
     image: ticicobresiserr/voting-app_worker:${VERSION}
+    container_name: worker-test
     networks:
       - back-tier-test
 
