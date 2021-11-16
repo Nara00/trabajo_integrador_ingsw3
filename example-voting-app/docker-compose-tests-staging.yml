@@ -8,8 +8,8 @@ services:
     ports:
       - "5002:80"
     networks:
-      - front-tier
-      - back-tier
+      - front-tier-test
+      - back-tier-test
 
   result:
     image: ticicobresiserr/voting-app_result:${VERSION}
@@ -18,20 +18,20 @@ services:
       - "5003:80"
       - "5859:5858"
     networks:
-      - front-tier
-      - back-tier
+      - front-tier-test
+      - back-tier-test
 
   worker:
     image: ticicobresiserr/voting-app_worker:${VERSION}
     networks:
-      - back-tier
+      - back-tier-test
 
   redis:
     image: redis:alpine
     container_name: redis
     ports: ["6380"]
     networks:
-      - back-tier
+      - back-tier-test
 
   db:
     image: postgres:9.4
@@ -40,8 +40,8 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
     networks:
-      - back-tier
+      - back-tier-test
 
 networks:
-  front-tier:
-  back-tier:
+  front-tier-test:
+  back-tier-test:
