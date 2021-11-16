@@ -2,63 +2,52 @@
 version: "3"
 
 services:
-  vote-test:
+  vote:
     image: ticicobresiserr/voting-app_vote:${VERSION}
-    container_name: vote-test
+    container_name: vote
     command: python app.py
     ports:
       - "5002:80"
     networks:
-      - front-tier-test
-      - back-tier-test
+      - front-tier
+      - back-tier
 
-  result-test:
+  result:
     image: ticicobresiserr/voting-app_result:${VERSION}
-    container_name: result-test
+    container_name: result
     command: nodemon server.js
     ports:
       - "5003:80"
       - "5859:5858"
     networks:
-      - front-tier-test
-      - back-tier-test
+      - front-tier
+      - back-tier
 
-  worker-test:
+  worker:
     image: ticicobresiserr/voting-app_worker:${VERSION}
-    container_name: worker-test
+    container_name: worker
     networks:
-      - back-tier-test
+      - back-tier
 
   redis:
     image: redis:alpine
     container_name: redis
-    volumes:
-      - "./healthchecks:/healthchecks"
-    healthcheck:
-      test: /healthchecks/redis.sh
-      interval: "5s"
     ports: ["6379"]
     networks:
-      - back-tier-test
+      - back-tier
 
-  db-test:
+  db:
     image: postgres:9.4
-    container_name: db-test
+    container_name: db
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-    volumes:
-      - "db-data:/var/lib/postgresql/data-t"
-      - "./healthchecks:/healthchecks"
-    healthcheck:
-      test: /healthchecks/postgres.sh
-      interval: "5s"
     networks:
-      - back-tier-test
+      - back-tier
 
 volumes:
   db-data:
 
 networks:
-  front-tier-test:
-  back-tier-test:
+  front-tier:
+  back-tier:
