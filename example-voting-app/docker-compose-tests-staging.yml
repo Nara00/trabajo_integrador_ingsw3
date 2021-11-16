@@ -29,9 +29,9 @@ services:
     networks:
       - back-tier-test
 
-  redis-test:
+  redis:
     image: redis:alpine
-    container_name: redis-test
+    container_name: redis
     volumes:
       - "./healthchecks:/healthchecks"
     healthcheck:

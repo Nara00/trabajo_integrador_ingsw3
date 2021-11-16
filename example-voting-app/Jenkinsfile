@@ -68,7 +68,7 @@ pipeline {
                     checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'CleanCheckout']], userRemoteConfigs: [[credentialsId: 'credenciales_git_2', url: 'https://github.com/Nara00/trabajo_integrador_ingsw3.git']]])
                     dir('example-voting-app') {
                         sh "echo $ver"
-                        sh "export VERSION=$ver && docker-compose -f docker-compose-tests-staging.yml up -d --force-recreate "
+                        sh "export VERSION=$ver && docker-compose -f docker-compose-tests-staging.yml up -d"
                     }
                 }
                 dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
