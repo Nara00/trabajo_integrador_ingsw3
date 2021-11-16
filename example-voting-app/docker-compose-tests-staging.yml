@@ -37,7 +37,7 @@ services:
     healthcheck:
       test: /healthchecks/redis.sh
       interval: "5s"
-    ports: ["6380"]
+    ports: ["6379"]
     networks:
       - back-tier-test
 
