@@ -38,12 +38,12 @@ services:
 
   db:
     image: postgres:9.4
-    container_name: db
+    container_name: db-test
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
     volumes:
-      - "./tmp/db:/var/lib/postgresql/data"
+      - "db-data-test:/var/lib/postgresql/data"
     ports:
       - "5432:5432"
     networks:
