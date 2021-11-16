@@ -81,9 +81,11 @@ pipeline {
                     dir('/Users/ticianacobresi/Desktop/4Anio/system_tests') {
                        junit 'output/result.xml'
                     } 
-                sh "docker-compose -f docker-compose-tests-staging.yml down "  
+                    dir('/Users/ticianacobresi/Desktop/4Anio/staging/example-voting-app') {
+                            sh "docker-compose -f docker-compose-tests-staging.yml down "   
+                        }
                 }
-            }   
+            }  
         }
         
         stage('Deploy') {
