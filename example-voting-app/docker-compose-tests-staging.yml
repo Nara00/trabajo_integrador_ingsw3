@@ -2,7 +2,7 @@
 version: "3"
 
 services:
-  vote:
+  vote-test:
     image: ticicobresiserr/voting-app_vote:${VERSION}
     container_name: vote-test
     command: python app.py
@@ -12,7 +12,7 @@ services:
       - front-tier-test
       - back-tier-test
 
-  result:
+  result-test:
     image: ticicobresiserr/voting-app_result:${VERSION}
     container_name: result-test
     command: nodemon server.js
@@ -23,20 +23,20 @@ services:
       - front-tier-test
       - back-tier-test
 
-  worker:
+  worker-test:
     image: ticicobresiserr/voting-app_worker:${VERSION}
     container_name: worker-test
     networks:
       - back-tier-test
 
-  redis:
+  redis-test:
     image: redis:alpine
     container_name: redis-test
     ports: ["6380"]
     networks:
       - back-tier-test
 
-  db:
+  db-test:
     image: postgres:9.4
     container_name: db-test
     environment:
