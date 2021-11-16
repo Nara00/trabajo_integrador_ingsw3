@@ -48,7 +48,7 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
     volumes:
-      - "db-data-t:/var/lib/postgresql/data"
+      - "db-data:/var/lib/postgresql/data-t"
       - "./healthchecks:/healthchecks"
     healthcheck:
       test: /healthchecks/postgres.sh
@@ -57,7 +57,7 @@ services:
       - back-tier-test
 
 volumes:
-  db-data-t:
+  db-data:
 
 networks:
   front-tier-test:
